@@ -89,8 +89,15 @@ def store_data(csv_path: str, type: str):
 
 
 
+
+
+
 def multinomial_pdf(x_value, type_array):
     pass
+
+
+
+
 
 
 
@@ -134,6 +141,7 @@ def fit(df):
 
 def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost):
     global _ghoul, _goblin, _ghost
+    df_to_np = np.array(df)
 
     for i in range(len(df)):
         ghost_probability = []
@@ -141,9 +149,9 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
         ghoul_probability = []
 
         for j in range(1, 5):
-            ghoul_probability.append(gauss_pdf(np.array(df)[i][j], mean_values_ghoul[j - 1], variances_ghoul[j - 1]))
-            goblin_probability.append(gauss_pdf(np.array(df)[i][j], mean_values_goblin[j - 1], variances_goblin[j - 1]))
-            ghost_probability.append(gauss_pdf(np.array(df)[i][j], mean_values_ghost[j - 1], variances_ghost[j - 1]))
+            ghoul_probability.append(gauss_pdf(df_to_np[i][j], mean_values_ghoul[j - 1], variances_ghoul[j - 1]))
+            goblin_probability.append(gauss_pdf(df_to_np[i][j], mean_values_goblin[j - 1], variances_goblin[j - 1]))
+            ghost_probability.append(gauss_pdf(df_to_np[i][j], mean_values_ghost[j - 1], variances_ghost[j - 1]))
 
             #print(gauss_pdf(np.array(df)[i][j], ghoul_array, j))
             #print(gauss_pdf(np.array(df)[i][j], goblins_array, j))
