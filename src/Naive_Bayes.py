@@ -11,7 +11,7 @@ from scipy.stats import norm
 from statistics import stdev, mean
 
 # metrics modules
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score
 
 
 NUM_OF_GHOULS = 0
@@ -89,8 +89,14 @@ def store_data(csv_path: str, type: str):
 
 
 
+
+
+
 def multinomial_pdf(x_value, type_array):
     pass
+
+
+
 
 
 
@@ -128,7 +134,6 @@ def fit(df):
     mean_values_ghost = [np.mean(ghost_array, 0)[i] for i in range(1, 5)]
     variances_ghost = [np.var(ghost_array, 0)[i] for i in range(1, 5)]
 
-    #print(mean_values_ghoul)
 
     return (mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost)
 
@@ -148,8 +153,8 @@ def main(*args):
     true = [train_df['type'][i] for i in range((len(train_df)))]
 
     # only for train
-    print(f1_score(true, predicted, average='weighted'))
-
+    print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
+    print("Accuracy = {}".format(accuracy_score(true, predicted)))
 
 
 
