@@ -14,27 +14,20 @@ import seaborn as sns
 from scipy.stats import norm
 from statistics import stdev, mean
 
+# metrics modules
 from sklearn.metrics import f1_score
-
 
 
 NUM_OF_GHOULS = 0
 NUM_OF_GOBLINS = 0
 NUM_OF_GHOSTS = 0
 
-
 _ghoul = []
 _goblin = []
 _ghost = []
 
-# omega(j): one of the following types: Ghoul, Goblin, Ghost.
 
-def plot_data(df):
-    pass
-
-
-
-def get_type_id_pair(df):
+def merge_predictions():
     predicted = []
     # use this for metrics calculation.
     # id_type_unordered_pair = [(monster_id, monster_type) for monster_id in df['id'] for monster_type in df.loc[(df['id'] == monster_id)]["type"]]
@@ -54,14 +47,6 @@ def get_type_id_pair(df):
             predicted.append(2)
 
     return predicted
-
-
-
-
-
-
-
-    # return id_type_unordered_pair
 
 
 
@@ -108,14 +93,8 @@ def store_data(csv_path: str, type: str):
 
 
 
-
-
-
 def multinomial_pdf(x_value, type_array):
     pass
-
-
-
 
 
 
@@ -130,8 +109,6 @@ def gauss_pdf(x_value, sample_mean, sample_variance):
 
 
     return (term1 * term2)
-
-
 
 
 def fit(df):
@@ -159,6 +136,8 @@ def fit(df):
 
     return (mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost)
 
+
+
 def main(*args):
     train_df = store_data("train.csv", "train")
     naive_bayes_args = fit(train_df)
@@ -168,7 +147,7 @@ def main(*args):
     naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
                 , naive_bayes_args[4], naive_bayes_args[5])
 
-    predicted = get_type_id_pair(train_df)
+    predicted = merge_predictions()
 
     true = [train_df['type'][i] for i in range((len(train_df)))]
 
