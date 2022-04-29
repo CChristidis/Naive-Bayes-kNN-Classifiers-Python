@@ -151,6 +151,7 @@ def main(*args):
 
     true = [train_df['type'][i] for i in range((len(train_df)))]
 
+    # only for train
     print(f1_score(true, predicted, average='weighted'))
 
 
