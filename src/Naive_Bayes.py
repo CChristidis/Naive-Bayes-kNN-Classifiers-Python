@@ -1,7 +1,3 @@
-import sys
-import os
-import gc
-
 # data manipulation modules
 import pandas as pd
 import numpy as np
@@ -160,10 +156,6 @@ def main(*args):
 
 def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost):
     global _ghoul, _goblin, _ghost
-
-    _ghoul = []
-    _goblin = []
-    _ghost = []
 
     for i in range(len(df)):
         ghost_probability = []
