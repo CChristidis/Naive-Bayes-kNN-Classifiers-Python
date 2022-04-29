@@ -135,12 +135,21 @@ def gauss_pdf(x_value, type_array, feature_id):
 
     return (term1 * term2)
 
+
+
+
+def fit():
+    pass
+
+
+
 def main(*args):
     df = store_train_data("train.csv")
     calculate_type_appearances(df)
     classes = np.unique(df.type)
 
     samples = [np.array(df.loc[df['type'] == idx]) for idx, el in enumerate(classes)]
+
 
     ghoul_array = samples[0]
     goblin_array = samples[1]
@@ -152,16 +161,10 @@ def main(*args):
 
     true = [df['type'][i] for i in range((len(df)))]
 
-    f1_score(true, predicted, average='weighted')
+    print(f1_score(true, predicted, average='weighted'))
 
 
 
-
-def get_max_index(list_score):
-    max_value = max(list_score)
-    max_index = list_score.index(max_value)
-
-    return max_index
 
 
 def naive_Bayes(df, ghoul_array, goblin_array, ghost_array):
@@ -195,7 +198,7 @@ def naive_Bayes(df, ghoul_array, goblin_array, ghost_array):
 
         list_score = [ghoul_score, goblin_score, ghost_score]
 
-        idx = get_max_index(list_score)
+        idx = np.argmax(list_score)
 
         if idx == 0:
             _ghoul.append(df['id'][i])
