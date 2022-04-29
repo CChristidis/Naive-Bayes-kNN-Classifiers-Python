@@ -89,15 +89,8 @@ def store_data(csv_path: str, type: str):
 
 
 
-
-
-
 def multinomial_pdf(x_value, type_array):
     pass
-
-
-
-
 
 
 
@@ -139,26 +132,6 @@ def fit(df):
 
 
 
-def main(*args):
-    train_df = store_data("train.csv", "train")
-    naive_bayes_args = fit(train_df)
-
-    test_df = store_data("test.csv", "test")
-
-    naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
-                , naive_bayes_args[4], naive_bayes_args[5])
-
-    predicted = merge_predictions()
-
-    true = [train_df['type'][i] for i in range((len(train_df)))]
-
-    # only for train
-    print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
-    print("Accuracy = {}".format(accuracy_score(true, predicted)))
-
-
-
-
 def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost):
     global _ghoul, _goblin, _ghost
 
@@ -193,6 +166,28 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
             _goblin.append(df['id'][i])
         elif idx == 2:
             _ghost.append(df['id'][i])
+
+
+
+
+
+def main(*args):
+    train_df = store_data("train.csv", "train")
+    naive_bayes_args = fit(train_df)
+
+    # print(np.unique(train_df['color']))
+    test_df = store_data("test.csv", "test")
+
+    naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
+                , naive_bayes_args[4], naive_bayes_args[5])
+
+    predicted = merge_predictions()
+
+    true = [train_df['type'][i] for i in range((len(train_df)))]
+
+    # only for train
+    print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
+    print("Accuracy = {}".format(accuracy_score(true, predicted)))
 
 
 
