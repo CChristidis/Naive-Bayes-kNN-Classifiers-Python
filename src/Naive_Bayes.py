@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score, accuracy_score
 
 
+import csv
+
 NUM_OF_GHOULS = 0
 NUM_OF_GOBLINS = 0
 NUM_OF_GHOSTS = 0
@@ -18,7 +20,7 @@ _goblin = []
 _ghost = []
 
 
-def merge_predictions():
+def merge_predictions() -> list:
     predicted = []
     # use this for metrics calculation.
     # id_type_unordered_pair = [(monster_id, monster_type) for monster_id in df['id'] for monster_type in df.loc[(df['id'] == monster_id)]["type"]]
@@ -84,13 +86,13 @@ def store_data(csv_path: str, type: str):
 
 
 
-def multinomial_pdf(x_value, colour_distribution_list):
+def multinomial_pdf(x_value, colour_distribution_list) -> float:
     return colour_distribution_list[x_value - 1]
 
 
 
 
-def gauss_pdf(x_value, sample_mean, sample_variance):
+def gauss_pdf(x_value, sample_mean, sample_variance) -> float:
     # calcuates the likelihood probability = p(x|omega(type)), given that x follows gaussian distribution
 
     term1 = 1 / (np.sqrt(2 * np.pi * (sample_variance)))
@@ -115,9 +117,13 @@ def fit(df):
 
     colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) for i in np.unique(df['color'])]
 
+
+
     ghoul_colours =  [p for p in colour_distribution[0:6]]
     goblin_colours = [p for p in colour_distribution[6:12]]
     ghost_colours = [p for p in colour_distribution[12:]]
+
+
 
     colour_distribution[0] = ghoul_colours
     colour_distribution[1] = goblin_colours
@@ -162,6 +168,7 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
         goblin_ = np.array(goblin_probability)
         ghost_ = np.array(ghost_probability)
 
+
         ghoul_score = np.prod(ghoul_)
         goblin_score = np.prod(goblin_)
         ghost_score = np.prod(ghost_)
@@ -178,6 +185,22 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
 
 
 
+def extract_predictions_csv (predicted, test_df):
+    predicted_lst = [[test_df.loc[idx]['id'], el] for idx, el in enumerate(predicted)]
+
+    for i in range(len(predicted_lst)):
+        if predicted_lst[i][1] == 0:
+            predicted_lst[i][1] = "Ghoul"
+        if predicted_lst[i][1] == 1:
+            predicted_lst[i][1] = "Goblin"
+        if predicted_lst[i][1] == 2:
+            predicted_lst[i][1] = "Ghost"
+
+    # Kaggle gives 0.74480 score.
+    prediction_df = pd.DataFrame(predicted_lst, columns=['id', 'type'])
+    prediction_df.to_csv("output.csv", index=False)
+
+
 def main(*args):
     train_df = store_data("train.csv", "train")
     naive_bayes_args = fit(train_df)
@@ -185,16 +208,19 @@ def main(*args):
     # print(np.unique(train_df['color']))
     test_df = store_data("test.csv", "test")
 
-    naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
+    naive_Bayes(test_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
                 , naive_bayes_args[4], naive_bayes_args[5], naive_bayes_args[6])
 
     predicted = merge_predictions()
 
-    true = [train_df['type'][i] for i in range((len(train_df)))]
+    extract_predictions_csv(predicted, test_df)
+
+
+    #true = [train_df['type'][i] for i in range((len(train_df)))]
 
     # only for train
-    print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
-    print("Accuracy = {}".format(accuracy_score(true, predicted)))
+    #print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
+    #print("Accuracy = {}".format(accuracy_score(true, predicted)))
 
 
 
