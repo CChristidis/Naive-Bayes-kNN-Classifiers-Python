@@ -8,9 +8,11 @@ import matplotlib.pyplot as plt
 # metrics modules
 from sklearn.metrics import f1_score, accuracy_score
 
-
+# csv modules
 import csv
 
+
+""" Globals: """
 NUM_OF_GHOULS = 0
 NUM_OF_GOBLINS = 0
 NUM_OF_GHOSTS = 0
