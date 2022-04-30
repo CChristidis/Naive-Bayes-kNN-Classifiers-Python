@@ -25,7 +25,6 @@ _ghost = []
 def merge_predictions() -> list:
     predicted = []
     # use this for metrics calculation.
-    # id_type_unordered_pair = [(monster_id, monster_type) for monster_id in df['id'] for monster_type in df.loc[(df['id'] == monster_id)]["type"]]
 
     _ghoul_max = max(_ghoul)
     _goblin_max = max(_goblin)
