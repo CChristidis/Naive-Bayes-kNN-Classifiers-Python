@@ -200,7 +200,7 @@ def extract_predictions_csv (predicted, test_df):
 
     # Kaggle gives 0.74480 score.
     prediction_df = pd.DataFrame(predicted_lst, columns=['id', 'type'])
-    prediction_df.to_csv("output.csv", index=False)
+    prediction_df.to_csv("naivebayes_output.csv", index=False)
 
 
 def main(*args):
