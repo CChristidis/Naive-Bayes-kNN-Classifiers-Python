@@ -207,7 +207,6 @@ def main(*args):
     train_df = store_data("train.csv", "train")
     naive_bayes_args = fit(train_df)
 
-    # print(np.unique(train_df['color']))
     test_df = store_data("test.csv", "test")
 
     naive_Bayes(test_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
