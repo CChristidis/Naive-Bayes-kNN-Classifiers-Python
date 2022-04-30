@@ -138,7 +138,7 @@ def kNN(test_df, train_df, k: int):
             attributes_distance_array.append(has_same_color + attributes_distance)
 
         attributes_distance_nparray = np.array(attributes_distance_array)
-        k_lowest_values_nparray = np.sort(np.argpartition(attributes_distance_nparray, k)[:k])
+        k_lowest_values_nparray = np.sort(np.argpartition(attributes_distance_nparray, k)[:5])
 
 
 
@@ -169,7 +169,7 @@ def extract_predictions_csv (predicted, test_df):
         if predicted_lst[i][1] == 2:
             predicted_lst[i][1] = "Ghost"
 
-    # Kaggle gives: 0.73345 score for kNN (k = 7).
+    # Kaggle gives: 0.74480 score for kNN (k = 7).
     prediction_df = pd.DataFrame(predicted_lst, columns=['id', 'type'])
     prediction_df.to_csv("output.csv", index=False)
 
