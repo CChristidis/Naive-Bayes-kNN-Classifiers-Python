@@ -89,13 +89,8 @@ def store_data(csv_path: str, type: str):
 
 
 
-
-
-
 def multinomial_pdf(x_value, colour_distribution_list):
     return colour_distribution_list[x_value - 1]
-
-
 
 
 
@@ -221,6 +216,9 @@ def main(*args):
     # only for train
     print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
     print("Accuracy = {}".format(accuracy_score(true, predicted)))
+
+
+
 
 
 
