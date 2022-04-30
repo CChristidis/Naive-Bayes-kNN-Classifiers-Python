@@ -4,11 +4,6 @@ import numpy as np
 
 # plot modules
 import matplotlib.pyplot as plt
-import seaborn as sns
-
-# statistics modules
-from scipy.stats import norm
-from statistics import stdev, mean
 
 # metrics modules
 from sklearn.metrics import f1_score, accuracy_score
@@ -129,20 +124,6 @@ def fit(df):
     colour_distribution[2] = ghost_colours
 
 
-
-    for i in range(len(ghoul_colours)):
-        if ghoul_colours[i] > goblin_colours[i] and ghoul_colours[i] > ghost_colours[i]:
-            colour_distribution.append(0)
-
-        elif goblin_colours[i] > ghoul_colours[i] and goblin_colours[i] > ghost_colours[i]:
-            colour_distribution.append(1)
-
-        elif ghost_colours[i] > ghoul_colours[i] and ghost_colours[i] > goblin_colours[i]:
-            colour_distribution.append(2)
-
-
-
-
     mean_values_ghoul = [np.mean(ghoul_array, 0)[i] for i in range(1, 5)]
     variances_ghoul = [np.var(ghoul_array, 0)[i] for i in range(1, 5)]
 
@@ -197,8 +178,6 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
 
 
 
-
-
 def main(*args):
     train_df = store_data("train.csv", "train")
     naive_bayes_args = fit(train_df)
@@ -216,10 +195,6 @@ def main(*args):
     # only for train
     print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
     print("Accuracy = {}".format(accuracy_score(true, predicted)))
-
-
-
-
 
 
 
