@@ -1,1 +1,1 @@
-# Naive-Bayes-Classifier-Python
+# Naive-Bayes-kNN-Classifiers-Python
