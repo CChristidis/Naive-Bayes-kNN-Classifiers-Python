@@ -92,9 +92,8 @@ def store_data(csv_path: str, type: str):
 
 
 
-def multinomial_pdf(x_value, type_array):
-    pass
-
+def multinomial_pdf(x_value, colour_distribution_list):
+    return colour_distribution_list[x_value - 1]
 
 
 
@@ -124,6 +123,30 @@ def fit(df):
     goblin_array = samples[1]
     ghost_array = samples[2]
 
+    colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) for i in np.unique(df['color'])]
+
+    ghoul_colours =  [p for p in colour_distribution[0:6]]
+    goblin_colours = [p for p in colour_distribution[6:12]]
+    ghost_colours = [p for p in colour_distribution[12:]]
+
+    colour_distribution[0] = ghoul_colours
+    colour_distribution[1] = goblin_colours
+    colour_distribution[2] = ghost_colours
+
+
+
+    for i in range(len(ghoul_colours)):
+        if ghoul_colours[i] > goblin_colours[i] and ghoul_colours[i] > ghost_colours[i]:
+            colour_distribution.append(0)
+
+        elif goblin_colours[i] > ghoul_colours[i] and goblin_colours[i] > ghost_colours[i]:
+            colour_distribution.append(1)
+
+        elif ghost_colours[i] > ghoul_colours[i] and ghost_colours[i] > goblin_colours[i]:
+            colour_distribution.append(2)
+
+
+
 
     mean_values_ghoul = [np.mean(ghoul_array, 0)[i] for i in range(1, 5)]
     variances_ghoul = [np.var(ghoul_array, 0)[i] for i in range(1, 5)]
@@ -135,11 +158,13 @@ def fit(df):
     variances_ghost = [np.var(ghost_array, 0)[i] for i in range(1, 5)]
 
 
-    return (mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost)
+
+
+    return (mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost, colour_distribution)
 
 
 
-def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost):
+def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, variances_goblin, mean_values_ghost, variances_ghost, colour_distribution):
     global _ghoul, _goblin, _ghost
     df_to_np = np.array(df)
 
@@ -153,9 +178,9 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
             goblin_probability.append(gauss_pdf(df_to_np[i][j], mean_values_goblin[j - 1], variances_goblin[j - 1]))
             ghost_probability.append(gauss_pdf(df_to_np[i][j], mean_values_ghost[j - 1], variances_ghost[j - 1]))
 
-            #print(gauss_pdf(np.array(df)[i][j], ghoul_array, j))
-            #print(gauss_pdf(np.array(df)[i][j], goblins_array, j))
-            #print(gauss_pdf(np.array(df)[i][j], ghost_array, j))
+        ghoul_probability.append(multinomial_pdf(df_to_np[i][5], colour_distribution[0]))
+        goblin_probability.append(multinomial_pdf(df_to_np[i][5], colour_distribution[1]))
+        ghost_probability.append(multinomial_pdf(df_to_np[i][5], colour_distribution[2]))
 
         ghoul_ = np.array(ghoul_probability)
         goblin_ = np.array(goblin_probability)
@@ -187,7 +212,7 @@ def main(*args):
     test_df = store_data("test.csv", "test")
 
     naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
-                , naive_bayes_args[4], naive_bayes_args[5])
+                , naive_bayes_args[4], naive_bayes_args[5], naive_bayes_args[6])
 
     predicted = merge_predictions()
 
@@ -196,6 +221,7 @@ def main(*args):
     # only for train
     print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
     print("Accuracy = {}".format(accuracy_score(true, predicted)))
+
 
 
 
