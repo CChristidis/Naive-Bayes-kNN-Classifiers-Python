@@ -1,3 +1,18 @@
+# --------- F1 SCORES (used sklearn.metrics.f1_score) ---------
+# k = 1: 0.6724844583614864 
+# k = 5: 0.6919439207886707 
+# k = 7: 0.7088675008682425 
+# k = 10: 0.7331915398994123
+# k = 15: 0.7483625753068903
+
+# --------- ACCURACY SCORES (used sklearn.metrics.accuracy_score) ---------
+# k = 1: 0.6684636118598383
+# k = 5: 0.6873315363881402
+# k = 7: 0.706199460916442
+# k = 10: 0.7304582210242587 
+# k = 15: 0.7466307277628033
+
+
 # data manipulation modules
 import pandas as pd
 import numpy as np
