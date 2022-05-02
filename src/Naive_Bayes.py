@@ -64,9 +64,6 @@ def store_data(csv_path: str, type: str):
                         value=[1, 2, 3, 4, 5, 6], inplace=True)
     if type == "train":
         df['type'].replace(to_replace=["Ghoul", "Goblin", "Ghost"], value=[0, 1, 2], inplace=True)
-
-
-
     return df
 
 
@@ -192,19 +189,19 @@ def main(*args):
 
     test_df = store_data("test.csv", "test")
 
-    naive_Bayes(test_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
+    naive_Bayes(train_df, naive_bayes_args[0], naive_bayes_args[1], naive_bayes_args[2], naive_bayes_args[3]
                 , naive_bayes_args[4], naive_bayes_args[5], naive_bayes_args[6])
 
     predicted = merge_predictions()
 
-    extract_predictions_csv(predicted, test_df)
+    # extract_predictions_csv(predicted, test_df)
 
 
-    #true = [train_df['type'][i] for i in range((len(train_df)))]
+    true = [train_df['type'][i] for i in range((len(train_df)))]
 
     # only for train
-    # print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
-    # print("Accuracy = {}".format(accuracy_score(true, predicted)))
+    print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
+    print("Accuracy = {}".format(accuracy_score(true, predicted)))
 
 
 
