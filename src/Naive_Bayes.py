@@ -116,7 +116,8 @@ def fit(df):
     goblin_array = samples[1]
     ghost_array = samples[2]
 
-    colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) for i in np.unique(df['color'])]
+    colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) 
+			   for i in np.unique(df['color'])]
 
 
 
