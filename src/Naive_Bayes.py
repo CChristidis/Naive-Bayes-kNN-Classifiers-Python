@@ -60,35 +60,19 @@ def store_data(csv_path: str, type: str):
 
     colour_id_list = [colour_id for colour_id in df.drop_duplicates(subset='color')['color']]
 
-    for i in range(len(df)):
-        if df.at[i, 'color'] == colour_id_list[0]:
-            df.at[i, 'color'] = 1
-        elif df.at[i, 'color'] == colour_id_list[1]:
-            df.at[i, 'color'] = 2
-        elif df.at[i, 'color'] == colour_id_list[2]:
-            df.at[i, 'color'] = 3
-        elif df.at[i, 'color'] == colour_id_list[3]:
-            df.at[i, 'color'] = 4
-        elif df.at[i, 'color'] == colour_id_list[4]:
-            df.at[i, 'color'] = 5
-        elif df.at[i, 'color'] == colour_id_list[5]:
-            df.at[i, 'color'] = 6
+    df['color'].replace(to_replace=[colour_id_list[0], colour_id_list[1], colour_id_list[2], colour_id_list[3], colour_id_list[4], colour_id_list[5]],
+                        value=[1, 2, 3, 4, 5, 6], inplace=True)
+    if type == "train":
+        df['type'].replace(to_replace=["Ghoul", "Goblin", "Ghost"], value=[0, 1, 2], inplace=True)
 
 
-        if type == "train":
-            if df.at[i, 'type'] == "Ghoul":
-                df.at[i, 'type'] = 0
-            elif df.at[i, 'type'] == "Goblin":
-                df.at[i, 'type'] = 1
-            elif df.at[i, 'type'] == "Ghost":
-                df.at[i, 'type'] = 2
 
     return df
 
 
 
 def multinomial_pdf(x_value, colour_distribution_list) -> float:
-    return colour_distribution_list[x_value - 1]
+    return colour_distribution_list[int(x_value) - 1]
 
 
 
@@ -116,8 +100,7 @@ def fit(df):
     goblin_array = samples[1]
     ghost_array = samples[2]
 
-    colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) 
-			   for i in np.unique(df['color'])]
+    colour_distribution = [len(df.loc[(df['type'] == idx) & (df['color'] == i)]) / len(df.loc[df['type'] == idx]) for idx, el in enumerate(classes) for i in np.unique(df['color'])]
 
 
 
@@ -188,7 +171,7 @@ def naive_Bayes(df, mean_values_ghoul, variances_ghoul, mean_values_goblin, vari
 
 
 def extract_predictions_csv (predicted, test_df):
-    predicted_lst = [[test_df.loc[idx]['id'], el] for idx, el in enumerate(predicted)]
+    predicted_lst = [[test_df.loc[idx]['id'].astype(int), el] for idx, el in enumerate(predicted)]
 
     for i in range(len(predicted_lst)):
         if predicted_lst[i][1] == 0:
@@ -220,8 +203,8 @@ def main(*args):
     #true = [train_df['type'][i] for i in range((len(train_df)))]
 
     # only for train
-    #print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
-    #print("Accuracy = {}".format(accuracy_score(true, predicted)))
+    # print("F1 score = {}".format(f1_score(true, predicted, average='weighted')))
+    # print("Accuracy = {}".format(accuracy_score(true, predicted)))
 
 
 
